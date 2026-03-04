@@ -1,0 +1,15 @@
+const express = require("express");
+const router = express.Router();
+const {
+  createRazorpayOrder,
+  handleCheckout,
+} = require("../controllers/checkoutController");
+
+
+router.post("/create-order", createRazorpayOrder);
+
+
+router.post("/", handleCheckout);
+
+module.exports = router;
+
