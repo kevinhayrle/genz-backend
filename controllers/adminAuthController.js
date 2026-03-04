@@ -4,17 +4,18 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const adminLogin = async (req, res) => {
+
   const { username, password } = req.body;
 
   try {
 
     const [rows] = await db.query(
-      'SELECT * FROM admin WHERE email = ?',
+      "SELECT * FROM admin WHERE email = ?",
       [username]
     );
 
     if (rows.length === 0) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: "Invalid username or password" });
     }
 
     const admin = rows[0];
@@ -22,29 +23,20 @@ const adminLogin = async (req, res) => {
     const isMatch = await bcrypt.compare(password, admin.password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: "Invalid username or password" });
     }
 
     const token = jwt.sign(
-      {
-        adminId: admin.id,
-        username: admin.email
-      },
+      { adminId: admin.id },
       process.env.JWT_SECRET,
-      { expiresIn: '2h' }
+      { expiresIn: "2h" }
     );
 
-    res.json({
-      token,
-      admin: {
-        id: admin.id,
-        username: admin.email
-      }
-    });
+    res.json({ token });
 
   } catch (error) {
-    console.error('Admin login error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Admin login error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
