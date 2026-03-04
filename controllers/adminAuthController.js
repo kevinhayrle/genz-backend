@@ -9,10 +9,10 @@ const adminLogin = async (req, res) => {
 
   try {
 
-    const [rows] = await db.query(
-      "SELECT * FROM admin WHERE email = ?",
-      [username]
-    );
+const [rows] = await db.query(
+  "SELECT * FROM admin WHERE username = ?",
+  [username]
+);
 
     if (rows.length === 0) {
       return res.status(401).json({ message: "Invalid username or password" });
